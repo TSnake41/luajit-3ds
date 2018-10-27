@@ -1,0 +1,5 @@
+bin
+dkp/source/*
+dkp/include/*
+dkp/build
+buildvm.exe
