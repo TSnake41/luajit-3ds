@@ -38,9 +38,11 @@ src: lj_vm lj_inc
 	cp $(LJ_SRC)/lj_* $(DKP_SRC)/
 
 lj_inc: $(LJ_SRC)/luajit.h $(LJ_SRC)/lua.h $(LJ_SRC)/lua.hpp $(LJ_SRC)/lauxlib.h $(LJ_SRC)/lualib.h $(LJ_SRC)/luaconf.h
+	mkdir $(DKP_INC)
 	cp $^ $(DKP_DIR)/include/
 
 lj_vm: buildvm
+	mkdir $(DKP_SRC)
 	./buildvm -m elfasm -o $(DKP_SRC)/lj_vm.s
 	./buildvm -m bcdef -o $(DKP_SRC)/lj_bcdef.h $(ALL_LIB)
 	./buildvm -m ffdef -o $(DKP_SRC)/lj_ffdef.h $(ALL_LIB)

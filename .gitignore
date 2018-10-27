@@ -1,5 +1,10 @@
 bin
-dkp/source/*
-dkp/include/*
+dkp/source/*.c
+dkp/source/*.s
+dkp/source/*.h
+
+dkp/include/*.h
+dkp/include/*.hpp
+
 dkp/build
 buildvm.exe
