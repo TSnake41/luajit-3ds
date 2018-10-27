@@ -2,7 +2,7 @@
 LUA := luajit
 
 # LuaJIT flags
-CFLAGS := -DLUAJIT_TARGET=LUAJIT_ARCH_ARM -DLUAJIT_OS=LUAJIT_OS_OTHER
+CFLAGS := -DLUAJIT_TARGET=LUAJIT_ARCH_ARM -DLUAJIT_OS=LUAJIT_OS_OTHER -m32
 
 # Directories
 LJ_DIR := ./LuaJIT
@@ -16,6 +16,8 @@ DASC := $(LJ_SRC)/vm_arm.dasc
 DKP_DIR := ./dkp
 DKP_SRC := $(DKP_DIR)/source
 DKP_INC := $(DKP_DIR)/include
+
+BUILDVM := ./buildvm
 
 # LuaJIT libs to build VM
 ALL_LIB := $(LJ_SRC)/lib_base.c $(LJ_SRC)/lib_math.c $(LJ_SRC)/lib_bit.c \
@@ -43,13 +45,13 @@ lj_inc: $(LJ_SRC)/luajit.h $(LJ_SRC)/lua.h $(LJ_SRC)/lua.hpp $(LJ_SRC)/lauxlib.h
 
 lj_vm: buildvm
 	mkdir -p $(DKP_SRC)
-	./buildvm -m elfasm -o $(DKP_SRC)/lj_vm.s
-	./buildvm -m bcdef -o $(DKP_SRC)/lj_bcdef.h $(ALL_LIB)
-	./buildvm -m ffdef -o $(DKP_SRC)/lj_ffdef.h $(ALL_LIB)
-	./buildvm -m libdef -o $(DKP_SRC)/lj_libdef.h $(ALL_LIB)
-	./buildvm -m recdef -o $(DKP_SRC)/lj_recdef.h $(ALL_LIB)
-	# buildvm -m vmdef -o $(DKP_SRC)/jit/vmdef.lua $(ALL_LIB)
-	./buildvm -m folddef -o $(DKP_SRC)/lj_folddef.h $(LJ_SRC)/lj_opt_fold.c	 
+	$(BUILDVM) -m elfasm -o $(DKP_SRC)/lj_vm.s
+	$(BUILDVM) -m bcdef -o $(DKP_SRC)/lj_bcdef.h $(ALL_LIB)
+	$(BUILDVM) -m ffdef -o $(DKP_SRC)/lj_ffdef.h $(ALL_LIB)
+	$(BUILDVM) -m libdef -o $(DKP_SRC)/lj_libdef.h $(ALL_LIB)
+	$(BUILDVM) -m recdef -o $(DKP_SRC)/lj_recdef.h $(ALL_LIB)
+	# $(BUILDVM) -m vmdef -o $(DKP_SRC)/jit/vmdef.lua $(ALL_LIB)
+	$(BUILDVM) -m folddef -o $(DKP_SRC)/lj_folddef.h $(LJ_SRC)/lj_opt_fold.c	 
 
 buildvm: $(LJ_SRC)/host/buildvm_arch.h
 	$(CC) -I$(LJ_SRC) -I$(DASM_DIR) $(CFLAGS) $(LJ_SRC)/host/buildvm*.c -o buildvm
